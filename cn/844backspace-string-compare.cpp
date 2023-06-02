@@ -27,6 +27,13 @@ public:
         }
         return v1==v2;
     }
+
+    void backspace(string s, string t) {
+        int skips = 0, skipt = 0;
+
+
+
+    }
 };
 //leetcode submit region end(Prohibit modification and deletion)
 
