@@ -32,9 +32,8 @@ public:
             left = left->next;
             right = right->next;
         }
-        if(left->next == head) return head->next;
         left->next = left->next->next;
-        return head;
+        return dummyhead->next;
     }
 };
 //leetcode submit region end(Prohibit modification and deletion)
