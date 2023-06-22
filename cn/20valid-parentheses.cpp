@@ -14,6 +14,7 @@ class Solution {
 public:
     bool isValid(string s) {
         stack<char> st;
+        if(s.size() %2 == 1) return false;
         for(auto c: s) {
             //判空非常重要，防止出现['}]这种输入;
             if(st.empty()) st.push(c);
