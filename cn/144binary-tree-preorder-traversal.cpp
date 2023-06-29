@@ -5,6 +5,7 @@
 #include <string>
 #include <vector>
 #include <iostream>
+#include <stack>
 
 using namespace std;
 
@@ -32,6 +33,7 @@ struct TreeNode {
 class Solution {
 public:
 
+    //建立树和打印
     void buildTree(TreeNode* &curr) {
         int n;
         cin >> n;
@@ -53,6 +55,7 @@ public:
         printTree(root->right);
     }
 
+    //先序递归遍历
     void Traversal(TreeNode* curr, vector<int>& ivec) {
         if(curr == nullptr) return;
         ivec.push_back(curr->val);
@@ -64,7 +67,26 @@ public:
         vector<int> result;
         Traversal(root, result);
         return result;
+    }
 
+    vector<int> PreOrder(TreeNode* root) {
+        vector<int> result;
+        //初始化栈st，p是遍历指针;
+        stack<TreeNode*> st;
+        TreeNode* p = root;
+        while(p || !st.empty()) {
+            if(p) {
+                result.push_back(p->val);
+                st.push(p);
+                p = p->left;
+            }
+            else {
+                p = st.top();
+                st.pop();
+                p = p->right;
+            }
+        }
+        return result;
     }
 
 };
