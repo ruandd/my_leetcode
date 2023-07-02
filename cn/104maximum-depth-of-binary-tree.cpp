@@ -23,20 +23,25 @@ using namespace std;
 class Solution {
 public:
     int maxDepth(TreeNode* root) {
-        int depth = 0;
-        queue<TreeNode*> que;
-        if(root != nullptr) que.push(root);
-        while(!que.empty()) {
-            int size = que.size();
-            depth++;
-            for(int i = 0; i < size; i++) {
-                auto p = que.front();
-                que.pop();
-                if(p->left) que.push(p->left);
-                if(p->right) que.push(p->right);
-            }
-        }
-        return depth;
+//        int depth = 0;
+//        queue<TreeNode*> que;
+//        if(root != nullptr) que.push(root);
+//        while(!que.empty()) {
+//            int size = que.size();
+//            depth++;
+//            for(int i = 0; i < size; i++) {
+//                auto p = que.front();
+//                que.pop();
+//                if(p->left) que.push(p->left);
+//                if(p->right) que.push(p->right);
+//            }
+//        }
+//        return depth;
+        if(root == nullptr) return 0;
+        int ld = maxDepth(root->left);
+        int rd = maxDepth(root->right);
+        int ret = max(ld, rd) + 1;
+        return ret;
     }
 };
 //leetcode submit region end(Prohibit modification and deletion)
