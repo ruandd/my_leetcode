@@ -29,6 +29,18 @@ public:
         }
         reverse(ivec.begin(), ivec.end());
         return ivec;
+
+        /*二刷*/
+        vector<int> result(nums.size(), 0);
+        int left = 0, right = nums.size() - 1;
+        int index = nums.size() - 1;
+        while(left <= right) {
+            if(pow(nums[left], 2) > pow(nums[right], 2))
+                result[index--] = pow(nums[left++], 2);
+            else
+                result[index--] = pow(nums[right--], 2);
+        }
+        return result;
     }
 };
 //leetcode submit region end(Prohibit modification and deletion)

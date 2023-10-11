@@ -12,12 +12,20 @@ using namespace std;
 class Solution {
 public:
     int removeElement(vector<int>& nums, int val) {
-        int slow = 0;
-        for(int fast = 0; fast < nums.size(); fast++){
-            if(nums[fast] != val)
+        // int tail = nums.size() - 1, search = tail;
+        // for(;search >= 0; search--) {
+        //     if(nums[search] == val) {
+        //         nums[search] = nums[tail];
+        //         tail--;
+        //     }
+        // }
+        // return tail+1;
+        int slow = 0, fast = 0;
+        for(; fast < nums.size(); fast++) {
+            if(nums[fast] != val) {
                 nums[slow++] = nums[fast];
+            }
         }
-        return slow;
     }
 };
 //leetcode submit region end(Prohibit modification and deletion)
