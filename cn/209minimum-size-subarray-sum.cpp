@@ -12,16 +12,17 @@ using namespace std;
 class Solution {
 public:
     int minSubArrayLen(int target, vector<int>& nums) {
-        int result = INT32_MAX;
-        int sum = 0;
-        int i = 0;
+        int i = 0, sum = 0;
         int subLength = 0;
+        int result = INT32_MAX;
         for(int j = 0; j < nums.size(); j++) {
             sum += nums[j];
+            subLength++;
             while(sum >= target) {
-                subLength = (j - i + 1);
-                result = result < subLength ? result : subLength;
+                if(subLength < result)
+                    result = subLength;
                 sum -= nums[i++];
+                subLength--;
             }
         }
         return result == INT32_MAX ? 0 : result;
@@ -32,6 +33,7 @@ public:
 
 int main(){
     class Solution s;
-
+    vector<int> vec{2, 3, 1, 2, 4, 3};
+    s.minSubArrayLen(7, vec);
     return 0;
 }
