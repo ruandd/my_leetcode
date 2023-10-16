@@ -6,36 +6,44 @@
 #include <vector>
 #include <iostream>
 #include <unordered_set>
+#include <cmath>
+#include <cstdlib>
 
 using namespace std;
 
 //leetcode submit region begin(Prohibit modification and deletion)
 class Solution {
 public:
-    vector<int> split_num(int num) {
-        vector<int> result;
-        while(num) {
-            int remainder = (num%10);
-            result.push_back(remainder);
-            num = (num/10);
+//    vector<int> split_num(int num) {
+//        vector<int> result;
+//        while(num) {
+//            int remainder = (num%10);
+//            result.push_back(remainder);
+//            num = (num/10);
+//        }
+//        return result;
+//    }
+
+    int squareSum(int n) {
+        string s = to_string(n);
+        int sum = 0;
+        for(auto c: s) {
+            sum += pow(c - '0', 2);
         }
-        return result;
+        return sum;
     }
 
     bool isHappy(int n) {
-        std::unordered_set<int> result_set;  //存放结果,避免循环;
-        vector<int> tmp_vec;
-        do {
-            result_set.insert(n);       //记录在set中
-            auto tmp_vec = split_num(n);
-            int sum = 0;                     //计算累计和;
-            for(auto bg=tmp_vec.begin(); bg!=tmp_vec.end(); bg++) {
-                sum += (*bg)*(*bg);
-            };
-            n = sum;
-        } while(n != 1 && result_set.find(n) == result_set.end());
         if(n == 1) return true;
-        else return false;
+        unordered_set<int> s;
+        s.insert(n);
+        int sum = squareSum(n);
+        while(s.find(sum) == s.end()) {
+            if(sum == 1) return true;
+            s.insert(sum);
+            sum = squareSum(sum);
+        }
+        return false;
     }
 };
 //leetcode submit region end(Prohibit modification and deletion)
@@ -43,7 +51,7 @@ public:
 
 int main(){
     class Solution s;
-    auto ret = s.isHappy(19);
+    auto ret = s.isHappy(2);
     cout << "hello";
     return 0;
 }
