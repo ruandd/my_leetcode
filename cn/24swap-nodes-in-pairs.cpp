@@ -37,23 +37,17 @@ struct ListNode {
 class Solution {
 public:
     ListNode* swapPairs(ListNode* head) {
-        ListNode* dummyHead = new ListNode(0);
-        //添加虚拟头节点,统一操作
-        dummyHead->next = head;
-        ListNode* curr = dummyHead;
-        //指针每次迭代需要移动两步，所以迭代条件需要注意;
-        //同时这种操作避免了对单节点特殊情况的判断;
-        while(curr->next != nullptr && curr->next->next != nullptr) {
-            ListNode* tmp1 = curr->next;
-            ListNode* tmp2 = curr->next->next->next;
-            //开始交换
-            //交换操作的时候注意:curr未被赋值前指针不发生变动!!!!!!;
-            curr->next = curr->next->next;
-            curr->next->next = tmp1;
-            tmp1->next->next->next = tmp2;
+        ListNode* dummyHead = new ListNode(0, head);
+        ListNode* tail = dummyHead;
+        while(tail->next && tail->next->next) {
+            ListNode* pre = tail->next;
+            ListNode* cur = pre->next;
+            ListNode* next = cur->next;
 
-            //注意是移动两位;
-            curr = curr->next->next;
+            tail->next = cur;
+            cur->next = pre;
+            pre->next = next;
+            tail = pre;
         }
         return dummyHead->next;
     }

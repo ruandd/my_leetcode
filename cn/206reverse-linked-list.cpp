@@ -86,6 +86,21 @@ public:
         }
         return pre;
 #endif
+#if 0
+        /*头插法*/
+        if(!head || !head->next) return head;
+        ListNode* tail = head;
+        while(tail->next != nullptr) tail = tail->next;
+        /*使用头插法即可*/
+        while(head != tail) {
+            ListNode* tmp = head;
+            head = head->next;
+            tmp->next = tail->next;
+            tail->next = tmp;
+        }
+        return tail;
+#endif
+
     }
 };
 //leetcode submit region end(Prohibit modification and deletion)

@@ -11,76 +11,83 @@ using namespace std;
 //leetcode submit region begin(Prohibit modification and deletion)
 class MyLinkedList {
 public:
-    //定义链表节点结构体;
-    struct LinkedNode {
+    struct ListNode {
         int val;
-        LinkedNode* next;
-        LinkedNode(int val): val(val), next(nullptr) { }
+        ListNode* next;
+        ListNode():val(0), next(nullptr) {};
+        ListNode(int val):val(val), next(nullptr) {};
     };
+
+    ListNode* head = nullptr;
+    int length = 0;
+
+
     MyLinkedList() {
-        _dummyHead = new LinkedNode(0);
-        _size = 0;
+        head = new ListNode();
+        head->next = nullptr;
     }
 
     int get(int index) {
-        if(index >= _size) return -1;
-        LinkedNode* p = _dummyHead;    //p为链表第一个节点;
-        for(int i=0; i<=index; i++) {
-            p = p->next;
-        }
-        return p->val;
-
+        if(index >= length) return -1;
+        ListNode* cur = head;
+        while(index-- >= 0)
+            cur = cur->next;
+        return cur->val;
     }
 
     void addAtHead(int val) {
-        LinkedNode* tmp = new LinkedNode(val);
-        tmp->next = _dummyHead->next;
-        _dummyHead->next = tmp;
-        ++_size;
+        ListNode* tmp = new ListNode(val);
+        tmp->next = head->next;
+        head->next = tmp;
+        length++;
     }
 
     void addAtTail(int val) {
-        LinkedNode* tmp = new LinkedNode(val);
-        LinkedNode* p = _dummyHead;
-        while(p->next != nullptr)
-            p = p->next;
-        p->next = tmp;
-        ++_size;
+        addAtIndex(length, val);
     }
 
-    /*
-     * 对于插入元素来说，相对来说比较复杂;
-     * 因为插入的时候链表可能为空，所以一定要注意操作的统一;
-     * 必须对虚指针头节点操作，否则会出大问题;
-     */
     void addAtIndex(int index, int val) {
-        if(index > _size) return;
-        else if(index == _size) addAtTail(val);
-        else {
-            LinkedNode* p = _dummyHead;
-            for(int i=0; i<index; i++) {
-                p = p->next;
-            }
-            LinkedNode* tmp = new LinkedNode(val);
-            tmp->next = p->next;
-            p->next = tmp;
-            ++_size;
+        ListNode* tmp = new ListNode(val);
+        if(index > length) return;
+        ListNode* cur = head;
+        while(index-- > 0) {
+            cur = cur->next;
         }
+        tmp->next = cur->next;
+        cur->next = tmp;
+        length++;
     }
 
     void deleteAtIndex(int index) {
-        if(index < _size) {
-             LinkedNode* p = _dummyHead;
-             for(int i=0; i<index; i++)
-                 p = p->next;
-             p->next = p->next->next;
-             --_size;
+        if(index >= length) return;
+        ListNode* cur = head;
+        while(index-- > 0) {
+            cur = cur->next;
         }
+        ListNode* tmp = cur->next;
+        cur->next = cur->next->next;
+        delete tmp;
+        length--;
     }
 
-    int _size;
-    LinkedNode* _dummyHead;
+    void print() {
+        ListNode* cur = head->next;
+        while(cur != nullptr) {
+            cout << cur->val << " ";
+            cur = cur->next;
+        }
+    }
 };
+
+/**
+ * Your MyLinkedList object will be instantiated and called as such:
+ * MyLinkedList* obj = new MyLinkedList();
+ * int param_1 = obj->get(index);
+ * obj->addAtHead(val);
+ * obj->addAtTail(val);
+ * obj->addAtIndex(index,val);
+ * obj->deleteAtIndex(index);
+ */
 
 
 /**
@@ -97,16 +104,14 @@ public:
 
 int main(){
     MyLinkedList myLinkedList = MyLinkedList();
-    myLinkedList.addAtIndex(0, 10);
-    myLinkedList.addAtIndex(0, 20);
-    myLinkedList.addAtIndex(1, 30);
-    auto ret = myLinkedList.get(1);
-    cout << ret << endl;
-    for(auto p = myLinkedList._dummyHead; p!= nullptr; p=p->next)
-        cout << p->val << endl;
+    myLinkedList.addAtHead(1);
+    myLinkedList.addAtTail(3);
+    myLinkedList.addAtIndex(1, 2);
+    auto ret1 = myLinkedList.get(1);
     myLinkedList.deleteAtIndex(1);
-    for(auto p = myLinkedList._dummyHead; p!= nullptr; p=p->next)
-        cout << p->val << endl;
+    auto ret2 = myLinkedList.get(1);
+    myLinkedList.print();
+
 
     return 0;
 }
