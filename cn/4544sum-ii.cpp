@@ -8,38 +8,29 @@
 #include <unordered_map>
 
 using namespace std;
+/*
+ * 本题切记，求得是组合个数，不求位置。
+ * 假设cnt中-1有t个,当i+j为1时，应该是result += cnt[-1];
+ */
 
 //leetcode submit region begin(Prohibit modification and deletion)
 class Solution {
 public:
     int fourSumCount(vector<int>& nums1, vector<int>& nums2, vector<int>& nums3, vector<int>& nums4) {
+        unordered_map<int, int> cnt;
+        int result = 0;
         int n = nums1.size();
-        unordered_map<int, int> map12, map34;
-        for(int i=0; i<n; i++)
-            for(int j=0; j<n; j++) {
-                //遍历nums1和nums2，处理第一个map
-                int sum = nums1[i] + nums2[j];
-                auto iter = map12.find(sum);
-                //如果没有该元素，则插入
-                if(iter == map12.end()) map12.insert({sum, 1});
-                //如果已经有该“和”的情况，则对应的值加1
-                else (iter->second)++;
+        for(auto i: nums1)
+            for(auto j: nums2)
+                cnt[i+j]++;
 
-                //遍历nums3和nums4，处理第二个map
-                sum = nums3[i] + nums4[j];
-                iter = map34.find(sum);
-                if(iter == map34.end()) map34.insert({sum, 1});
-                else (iter->second)++;
+        for(auto i: nums3)
+            for(auto j: nums4) {
+                auto t = cnt.find(0 - i - j);
+                if(t != cnt.end())
+                    result += t->second;
             }
-
-        //开始遍历两个map;
-        int num = 0;
-        for(auto iter1=map12.cbegin(); iter1!=map12.cend(); iter1++) {
-            auto iter2 = map34.find(-(iter1->first));
-            if(iter2 != map34.end())
-                num = num + (iter1->second) * (iter2->second);
-        }
-        return num;
+        return result;
     }
 };
 //leetcode submit region end(Prohibit modification and deletion)
@@ -47,6 +38,7 @@ public:
 
 int main(){
     class Solution s;
-
+    vector<int> v1{-1, -1}, v2{-1, 1}, v3{-1, 1}, v4{1, -1};
+    s.fourSumCount(v1, v2, v3, v4);
     return 0;
 }
