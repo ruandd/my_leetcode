@@ -11,41 +11,41 @@ using namespace std;
 //leetcode submit region begin(Prohibit modification and deletion)
 class Solution {
 public:
-    void reverse(vector<char>& s, int left, int right) {
-        while(left <= right) {
-            auto tmp = s[left];
-            s[left] = s[right];
-            s[right] = tmp;
-            left++;
-            right--;
+    void removeExtraSpaces(string& s) {
+        int slow = 0;
+        for(int i = 0; i < s.size(); i++) {
+            if(s[i] != ' ') {
+                /*为什么不是s[++slow], 因为一开始slow指向的也是无效字符，换句话说，它指向新字符数组的
+                 * 下一个位置*/
+                if(slow != 0) s[slow++] = ' ';
+                while(i < s.size() && s[i] != ' ')
+                    s[slow++] = s[i++];
+            }
+        }
+        s.resize(slow);
+    }
+
+    void reverse(string& s, int start, int end) {
+        for(int i = start, j = end; i < j; i++, j--) {
+            swap(s[i], s[j]);
         }
     }
 
     string reverseWords(string s) {
-        //用vector，避免需要遍历一次s，才能创建暂存结果的string;
-        vector<char> cvec;
-        int index = s.size()-1;
-        //逆序存放，并去除开头的空格;
-        while(s[index] == ' ' && index != 0) --index;
-        while(index != -1) {
-            //非空格，直接保存;
-            if(s[index] != ' ') cvec.push_back(s[index--]);
-            //遇到空格且前一个非空格，即单独空格，保存;
-            else if(s[index] == ' ' && s[index+1] != ' ') cvec.push_back(s[index--]);
-            else index--;
-        }
-        //加入一个空格，方便后续处理;
-        if(cvec[cvec.size()-1] != ' ') cvec.push_back(' ');;
-        //对每个单词逆序即可;
+        /*去除多余的空格并翻转整个字符串*/
+        removeExtraSpaces(s);
+        reverse(s, 0, s.size() -1);
         int left = 0, right = 0;
-        while(right < cvec.size()) {
-            while(cvec[right] != ' ') ++right;
-            reverse(cvec, left, right-1);
-            left = right + 1;
-            right = left;
+        while(right < s.size()) {
+            if(s[right] != ' ') right++;
+            else {
+                reverse(s, left, right - 1);
+                left = right + 1;
+                right = left;
+            }
         }
-        return string(cvec.begin(), cvec.end()-1);
-
+        reverse(s, left, right - 1);
+        return s;
     }
 };
 //leetcode submit region end(Prohibit modification and deletion)

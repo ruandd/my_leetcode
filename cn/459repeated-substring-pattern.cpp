@@ -12,11 +12,6 @@ using namespace std;
 class Solution {
 public:
     bool repeatedSubstringPattern(string s) {
-        int slowindex = 0;
-        for(int fastindex = 0; fastindex < s.size(); fastindex++) {
-            if(s[fastindex] != )
-        }
-
     }
 };
 //leetcode submit region end(Prohibit modification and deletion)
