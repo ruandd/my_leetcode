@@ -6,6 +6,7 @@
 #include <vector>
 #include <iostream>
 #include <queue>
+#include <algorithm>
 
 using namespace std;
 
@@ -32,31 +33,37 @@ using namespace std;
 class Solution {
 public:
     vector<vector<int>> levelOrder(Node* root) {
-        queue<Node*> que;
-        //储存结果;
         vector<vector<int>> result;
+        queue<Node*> que;
         if(root != nullptr) que.push(root);
         while(!que.empty()) {
             int size = que.size();
-            //保存每一层的值;
-            vector<int> vec;
+            vector<int> line;
             for(int i = 0; i < size; i++) {
-                auto p = que.front();
+                Node* p = que.front();
+                line.push_back(p->val);
                 que.pop();
-                vec.push_back(p->val);
                 for(int j = 0; j < p->children.size(); j++)
                     que.push(p->children[j]);
             }
-            result.push_back(vec);
+            result.push_back(line);
         }
-        return result;
-    }
+        return result;    }
 };
 //leetcode submit region end(Prohibit modification and deletion)
 
 
 int main(){
     class Solution s;
+    Node* p1 = new Node(5);
+    Node* p2 = new Node(6);
+    vector<Node*> v1{p1, p2};
+    Node* p3 = new Node(3, v1);
+    Node* p4 = new Node(2);
+    Node* p5 = new Node(4);
+    vector<Node*> v2{p3, p4, p5};
+    Node* root = new Node(1, v2);
+    s.levelOrder(root);
 
     return 0;
 }

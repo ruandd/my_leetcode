@@ -19,6 +19,7 @@ using namespace std;
 //leetcode submit region begin(Prohibit modification and deletion)
 class Solution {
 public:
+    /*反向判断，是符号就操作，数字直接入栈*/
     int evalRPN(vector<string>& tokens) {
         stack<long int> st;
         long int num1, num2;

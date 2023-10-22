@@ -15,14 +15,16 @@ private:
     class myQueue {
     public:
         void push(int value) {
-            //空则直接入队;
-            if(que.empty()) que.push_back(value);
-            else {
-                //弹出队列尾部小于value的元素;
-                while(!que.empty() && que.back() < value)
-                    que.pop_back();
+            /*为空则直接插入元素，否则删除前面较小的元素，再插入*/
+            if(que.empty()) {
                 que.push_back(value);
+                return;
             }
+            while(!que.empty() && (value > que.back())) {
+                que.pop_back();
+            }
+            que.push_back(value);
+
         }
 
         void pop(int value) {
@@ -41,17 +43,18 @@ public:
     vector<int> maxSlidingWindow(vector<int>& nums, int k) {
         myQueue que;
         vector<int> result;
-        //构造初始单调队列和最大值;
-        for(int i = 0; i < k; i++)
+        /*初始化*/
+        for(int i = 0; i < k; i++) {
             que.push(nums[i]);
-        result.push_back(que.front());
-
-        for(int idx = 0; idx + k < nums.size(); idx++) {
-            que.pop(nums[idx]);
-            que.push(nums[idx + k]);
-            result.push_back(que.front());
         }
+        for(int i = 0; i < nums.size() - k; i++) {
+            result.push_back(que.front());
+            que.pop(nums[i]);
+            que.push(nums[i+k]);
+        }
+        result.push_back(que.front());
         return result;
+
 
     }
 };
