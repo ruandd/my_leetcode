@@ -32,37 +32,27 @@ struct TreeNode {
  */
 class Solution {
 public:
-    //必须按照前序遍历的顺序输入二叉树;
-    void buildTree(TreeNode* &curr) {
-        int n;
-        cin >> n;
-        if(n == -1) {
-            curr = nullptr;
+    /*回溯法*/
+    void search(TreeNode* root, int targetSum, bool& flag) {
+        if(root == nullptr) return;
+        targetSum -= root->val;
+        if(root->left == nullptr && root->right == nullptr && targetSum == 0) {
+            flag = true;
+            return;
         }
-        else {
-            curr = new TreeNode(n);
-            curr->val = n;
-            buildTree(curr->left);
-            buildTree(curr->right);
+        if(root->left == nullptr && root->right == nullptr && targetSum != 0) {
+            return;
         }
+
+        search(root->left, targetSum, flag);
+        search(root->right, targetSum, flag);
     }
-
-
     bool hasPathSum(TreeNode* root, int targetSum) {
-        if(root->left == nullptr && root->right == nullptr) {
-            return !(targetSum - root->val);
-        }
-        if(root->left) {
-            bool left = hasPathSum(root->left, targetSum - root->val);
-            cout << "left:" << left << endl;
-        }
+        bool flag = false;
+        if(root != nullptr)
+            search(root, targetSum, flag);
+        return flag;
 
-        if(root->right) {
-            bool right = hasPathSum(root->right, targetSum - root->val);
-            cout << "right:" << right << endl;
-        }
-
-        return (0 || !right);
     }
 };
 //leetcode submit region end(Prohibit modification and deletion)

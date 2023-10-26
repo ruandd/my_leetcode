@@ -26,32 +26,24 @@ using namespace std;
  */
 class Solution {
 public:
-    void searchTrace(TreeNode* curr, vector<int>& path, vector<string>& result) {
-        path.push_back(curr->val);
-        if(curr->left == nullptr && curr->right == nullptr) {
-            string tmp;
-            for(int i = 0; i < path.size() - 1; i++) {
-                tmp += to_string(path[i]);
-                tmp += "->";
-            }
-            tmp += to_string(path[path.size()-1]);
-            result.push_back(tmp);
-            return;
+    /*使用回溯*/
+    vector<string> result;
+    void search(TreeNode* root, string str) {
+        if(root->left != nullptr) {
+            search(root->left, str + string("->") + to_string(root->left->val));
         }
-        if(curr->left) {
-            searchTrace(curr->left, path, result);
-            path.pop_back();
+        if(root->right != nullptr) {
+            search(root->right, str + string("->") + to_string(root->right->val));
         }
-        if(curr->right) {
-            searchTrace(curr->right, path, result);
-            path.pop_back();
-        }
-    }
+        if(root->left == nullptr && root->right == nullptr)
+            result.push_back(str);
+        return;
 
+    }
     vector<string> binaryTreePaths(TreeNode* root) {
-        vector<int> path;
-        vector<string> result;
-        searchTrace(root, path, result);
+        string str;
+        if(root) str = to_string(root->val);
+        search(root, str);
         return result;
     }
 };

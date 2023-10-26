@@ -26,17 +26,18 @@ using namespace std;
  */
 class Solution {
 public:
+    /*判断叶子节点很简单，关键如何判断该叶子节点是左叶子呢？
+    通过引入一个bool值，只在左递归的时候为true即可*/
+    void sumLTree(TreeNode* root, int& sum, bool flag) {
+        if(root == nullptr) return;
+        if(!root->left && !root->right && flag) sum += root->val;
+        sumLTree(root->left, sum, true);
+        sumLTree(root->right, sum, false);
+    }
     int sumOfLeftLeaves(TreeNode* root) {
-        if(root == nullptr) return 0;
-
-        auto suml = sumOfLeftLeaves(root->left);
-        if (root->left && !root->left->left && !root->left->right) { // 左子树就是一个左叶子的情况
-            suml = root->left->val;
-        }
-        auto sumr = sumOfLeftLeaves(root->right);
-        int sum = suml + sumr;
+        int sum = 0;
+        sumLTree(root, sum, false);
         return sum;
-
     }
 };
 //leetcode submit region end(Prohibit modification and deletion)
@@ -44,6 +45,5 @@ public:
 
 int main(){
     class Solution s;
-
     return 0;
 }

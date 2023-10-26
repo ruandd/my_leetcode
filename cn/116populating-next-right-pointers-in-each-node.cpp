@@ -50,9 +50,15 @@ public:
 };
 //leetcode submit region end(Prohibit modification and deletion)
 
-
+char* f() {
+    char* x = "hello world";
+    return x+6;
+}
 int main(){
-    class Solution s;
-
-    return 0;
+    vector<int> dp(9,0);
+    dp[1] = 1;
+    dp[2] = 2;
+    for(int i =3; i < 9; i++)
+        dp[i] = dp[i-1] + dp[i-2];
+    cout << dp[8] << endl;
 }
