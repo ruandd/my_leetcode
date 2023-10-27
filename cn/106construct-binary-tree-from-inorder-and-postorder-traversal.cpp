@@ -35,40 +35,33 @@ struct TreeNode {
  */
 class Solution {
 public:
-    TreeNode* traversal(vector<int>& inorder, vector<int>& postorder) {
-        if(postorder.empty())  return nullptr;
+    TreeNode* buildTree(vector<int>& inorder, vector<int>& postorder) {
+        if(postorder.size() == 0) return nullptr;
 
-        //建立当前节点;
-        int rootValue = postorder.back();
+        /*第一步，取后序数组最后一个元素*/
+        int rootValue = postorder[postorder.size() - 1];
         TreeNode* root = new TreeNode(rootValue);
 
-        //返回叶子节点;
-        if(postorder.size() == 1) return root;
+        // if(postorder.size() == 1) return root;
 
-        //寻找中序遍历切割点;
-        int delimiterIdx;
-        for(delimiterIdx = 0; delimiterIdx < inorder.size(); delimiterIdx++)
-            if(inorder[delimiterIdx] == postorder.back())
+        /*找到切割点*/
+        int deliteIndx;
+        for(int i = 0; i < inorder.size(); i++)
+            if(inorder[i] == rootValue) {
+                deliteIndx = i;
                 break;
+            }
 
-        //分割中序数组,左闭右开;
-        vector<int> leftInorder(inorder.begin(), inorder.begin() + delimiterIdx);
-        vector<int> rightInorder(inorder.begin() + delimiterIdx + 1, inorder.end());
+        /*切割中序数组和后序数组,因为它的默认构造函数就是左闭右开的！！！！！*/
+        vector<int> leftInorder(inorder.begin(), inorder.begin() + deliteIndx);
+        vector<int> rightInorder(inorder.begin() + deliteIndx + 1, inorder.end());
+        vector<int> leftPostorder(postorder.begin(), postorder.begin() + deliteIndx);
+        vector<int> rightPostorder(postorder.begin() + deliteIndx, postorder.end() - 1);
 
-        //分割后序数组,左闭右开;
-        int sz = leftInorder.size();
-        vector<int> leftPostorder(postorder.begin(), postorder.begin() + sz);
-        vector<int> rightPostorder(postorder.begin() + sz , postorder.end() - 1);
-
-        root->left = traversal(leftInorder, leftPostorder);
-        root->right = traversal(rightInorder, rightPostorder);
+        root->left = buildTree(leftInorder, leftPostorder);
+        root->right = buildTree(rightInorder, rightPostorder);
 
         return root;
-    }
-
-    TreeNode* buildTree(vector<int>& inorder, vector<int>& postorder) {
-        if (inorder.size() == 0 || postorder.size() == 0) return NULL;
-        return traversal(inorder, postorder);
     }
 };
 //leetcode submit region end(Prohibit modification and deletion)

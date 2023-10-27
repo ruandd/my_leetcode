@@ -20,19 +20,17 @@ using namespace std;
  */
 class Solution {
 public:
+    /*必须考虑到p是q的父节点这种情况
+     当左子树返回p,右子树返回空的时候，则q必在p的子树中*/
     TreeNode* lowestCommonAncestor(TreeNode* root, TreeNode* p, TreeNode* q) {
-        if(root == nullptr || root == p || root == q) return root;
-        //左;
-        auto left = lowestCommonAncestor(root->left, p, q);
-        //右;
-        auto right = lowestCommonAncestor(root->right, p, q);
+        if(root == p || root == q || root == nullptr) return root;
 
-        //处理单层递归逻辑;
-        if(left && right) return root;
-        if(left && !right) return left;
-        if(!left && right) return right;
-        //必须有返回值;
-        return nullptr;
+        auto left = lowestCommonAncestor(root->left, p, q);
+        auto right = lowestCommonAncestor(root->right, p, q);
+        if(left != nullptr && right != nullptr) return root;
+        if(left == nullptr) return right;
+        if(right == nullptr) return left;
+        return root;
     }
 };
 //leetcode submit region end(Prohibit modification and deletion)

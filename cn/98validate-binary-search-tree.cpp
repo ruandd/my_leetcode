@@ -22,21 +22,25 @@ using namespace std;
  */
 class Solution {
 public:
-    long long maxVal = LONG_MIN;
-    bool isValidBST(TreeNode* root) {
-        if(root == nullptr) return true;
+    bool flag = true;
+    /*pre指针必须是引用*/
+    void travel(TreeNode* root, TreeNode*& pre) {
+        if(root == nullptr) return;
 
-        auto left = isValidBST(root->left);
-        //不可以返回，因为要遍历整棵树;
-        //比较思路要正确，不能只是单纯比较根节点和左右节点;
-        if(root->val > maxVal) {
-            maxVal = root->val;
+        travel(root->left, pre);
+        if(pre == nullptr) {
+            pre = root;
         }
-        else return false;
-
-        auto right = isValidBST(root->right);
-
-        return left && right;
+        else {
+            if(root->val <= pre->val) flag = false
+            pre = root;
+        }
+        travel(root->right, pre);
+    }
+    bool isValidBST(TreeNode* root) {
+        TreeNode* pre = nullptr;
+        travel(root, pre);
+        return flag;
     }
 };
 //leetcode submit region end(Prohibit modification and deletion)
@@ -44,6 +48,6 @@ public:
 
 int main(){
     class Solution s;
-
+    int a = I
     return 0;
 }
