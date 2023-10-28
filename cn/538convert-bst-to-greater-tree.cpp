@@ -23,23 +23,14 @@ using namespace std;
 class Solution {
 public:
     int sum = 0;
-    TreeNode* pre = nullptr;
-    void traversal(TreeNode* root) {
-        if(root == nullptr) return;
-        traversal(root->right);
-        //第一个节点特殊处理;
-        if(pre == nullptr) {
-            sum += root->val;
-        }
-        else {
-            root->val += sum;
-            sum = root->val;
-        }
-        pre = root;
-        traversal(root->left);
-    }
     TreeNode* convertBST(TreeNode* root) {
-        traversal(root);
+        if(root == nullptr) return nullptr;
+
+        root->right = convertBST(root->right);
+        int tmp = root->val;
+        root->val += sum;
+        sum += tmp;
+        root->left = convertBST(root->left);
         return root;
     }
 };
