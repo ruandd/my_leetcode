@@ -12,47 +12,27 @@ using namespace std;
 //leetcode submit region begin(Prohibit modification and deletion)
 class Solution {
 public:
-    //映射数组
-    const string letterMap[10] = {
-            "",
-            "",
-            "abc",
-            "def",
-            "ghi",
-            "jkl",
-            "mno",
-            "pqrs",
-            "tuv",
-            "wxyz",
-    };
+
+    unordered_map<char, string> hash{{'2', "abc"}, {'3', "def"}, {'4', "ghi"}, {'5', "jkl"}, {'6', "mno"},
+                                     {'7', "pqrs"}, {'8', "tuv"}, {'9', "wxyz"}};
     vector<string> result;
     string path;
-    void backtracking(string& digits, int smartIdx) {
+    void backtracking(string digits, int startIndex) {
         if(path.size() == digits.size()) {
             result.push_back(path);
             return;
         }
-
-        for(int i = smartIdx; i < digits.size(); i++) {
-            //取出映射的数组;
-            int tmp;
-            std::stringstream str2digit;
-            str2digit << digits[i];
-            str2digit >> tmp;
-            string letters = letterMap[tmp];
-            for(int j = 0; j < letters.size(); j++) {
-                path.push_back(letters[j]);
-                //进入递归;
+        /*本题也是一个组合问题，只不过多了一层映射*/
+        for(int i = startIndex; i < digits.size(); i++) {
+            for(auto c : hash[digits[i]]) {
+                path += c;
                 backtracking(digits, i + 1);
-                path.pop_back();  //回溯;
+                path.erase(path.begin() + path.size() - 1);
             }
-
         }
-    }
+    };
     vector<string> letterCombinations(string digits) {
-        //空需要单独处理;
-        //因为需要返回[]，而不是[""];
-        if(digits.empty()) return result;
+        if(digits.size() == 0) return vector<string>{};
         backtracking(digits, 0);
         return result;
     }
@@ -62,8 +42,7 @@ public:
 
 int main(){
     class Solution s;
-    string d("23");
-    s.letterCombinations(d);
+
 
     return 0;
 }

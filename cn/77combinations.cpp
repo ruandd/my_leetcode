@@ -17,22 +17,24 @@ class Solution {
 public:
     vector<vector<int>> result;
     vector<int> path;
-    void backtracking(int n, int k, int smartIdx) {
+    void backtracking(int n, int k， int startIndex) {
         if(path.size() == k) {
             result.push_back(path);
             return;
         }
 
-        for(int i = smartIdx; i <= n; i++) {
+        /*这是一个组合问题，不可以重复，故i需要递增
+        此处引入一个剪枝，path.size()为已经放进去的元素
+        k - path.size()为还需要多少个元素
+        n - (k - path.size()) + 1为至少从哪个startIndex开始元素才足够*/
+        for(int i = startIndex; i <= n - (k - path.size()) + 1; i++) {
             path.push_back(i);
-            backtracking(n, k, i + 1);
-            //对于同一层的横向遍历，弹出上次的选择;
+            backtracking(n, k, startIndex + 1);
             path.pop_back();
         }
-    }
-
+    };
     vector<vector<int>> combine(int n, int k) {
-        backtracking(n, k, 1);
+        backtracking(n, 1, k);
         return result;
     }
 };
