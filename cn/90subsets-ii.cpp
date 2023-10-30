@@ -13,26 +13,22 @@ class Solution {
 public:
     vector<vector<int>> result;
     vector<int> path;
-    void backtracking(vector<int>& nums, int startIndex, vector<bool>& used) {
+    void backtracking(vector<int>& nums, int startIndex) {
         result.push_back(path);
         if(startIndex >= nums.size()) return;
 
         for(int i = startIndex; i < nums.size(); i++) {
-            if(i > 0 && nums[i] == nums[i-1] && used[i-1] == false)
-                continue;
+            /*在同一树的层上剪枝*/
+            if(i != startIndex && nums[i] == nums[i-1]) continue;
             path.push_back(nums[i]);
-            used[i] = true;
-            backtracking(nums, i + 1, used);
-            used[i] = false;
+            backtracking(nums, i + 1);
             path.pop_back();
         }
     }
-
     vector<vector<int>> subsetsWithDup(vector<int>& nums) {
-        vector<bool> used(nums.size(), false);
-        //必须先排序;
+        /*需要且可以排序*/
         sort(nums.begin(), nums.end());
-        backtracking(nums, 0, used);
+        backtracking(nums, 0);
         return result;
     }
 };

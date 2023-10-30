@@ -23,7 +23,6 @@ public:
 
         for(int i = startIndex; i < nums.size(); i++) {
             path.push_back(nums[i]);
-
             backtracking(nums, i + 1);
             path.pop_back();
         }
