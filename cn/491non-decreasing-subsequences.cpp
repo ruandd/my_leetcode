@@ -44,13 +44,13 @@ public:
 /*正确的思路*/
     vector<vector<int>> result;
     vector<int> path;
-    unordered_set<int> set;
     /*本题去重逻辑与之前的那个不同*/
     void backtracking(vector<int>& nums, int startIndex) {
         if(path.size() >= 2) result.push_back(path);
         if(startIndex >= nums.size()) return;
 
         /*为什么这个去重逻辑不是push和pop，而是每一层重新定义？？？*/
+        unordered_set<int> set;
         for(int i = startIndex; i < nums.size(); i++) {
             /*去重逻辑，只要本层使用过，就不再使用*/
             if(set.find(nums[i]) != set.end()) continue;
@@ -65,7 +65,6 @@ public:
             set.insert(nums[i]);
             backtracking(nums, i + 1);
             path.pop_back();
-            set.erase(nums[i]);
         }
     }
     vector<vector<int>> findSubsequences(vector<int>& nums) {

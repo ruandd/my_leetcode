@@ -11,11 +11,18 @@ using namespace std;
 //leetcode submit region begin(Prohibit modification and deletion)
 class Solution {
 public:
+    /*多个数字前导0返回false
+      数字大于3位返回false
+      数字大于255返回false, 避免产生"1124" < "255"这种情况
+      直接字符比较，转成int会溢出
+      数字位数不同必须单独比较*/
     bool isValid(const string& s, int beg, int end) {
         if(end != beg && s[beg] == '0') return false;
-        auto tmp = string(s.begin() + beg, s.end() + end + 1);
-        /*不能先转化为整型再去比较，会溢出，需要直接对字符串进行比较*/
-        if(tmp > string("255")) return false;
+        auto tmp = s.substr(beg, end - beg + 1);
+        if(tmp.size() > 3) return false;
+        if(tmp.size() == 1 && tmp < "0" || tmp > "9") return false;
+        if(tmp.size() == 2 && tmp < "10" || tmp > "99") return false;
+        if(tmp.size() == 3 && tmp > "255") return false;
         return true;
     }
 
@@ -23,14 +30,13 @@ public:
     string path;
     /*记录字节数*/
     int num = 0;
+
     void backtracking(const string& s, int startIndex) {
         if(num == 4 && startIndex >= s.size()) {
             result.push_back(path);
             return;
         }
-        if(num == 4 && startIndex < s.size()) return;
         if(num > 4 || startIndex >= s.size()) return;
-
 
 
         for(int i = startIndex; i < s.size(); i++) {
@@ -71,7 +77,7 @@ public:
 
 int main(){
     class Solution s;
-    string str("255123451243123");
+    string str("25525511135");
     s.restoreIpAddresses(str);
     return 0;
 }
