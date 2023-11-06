@@ -13,26 +13,20 @@ using namespace std;
 class Solution {
 public:
     vector<int> dailyTemperatures(vector<int>& temperatures) {
-        deque<int> que;
+        /*st中的元素是单调递减的*/
+        vector<int> st;
         vector<int> result(temperatures.size(), 0);
-        /*保持栈内元素单调递减*/
         for(int i = 0; i < temperatures.size(); i++) {
-            if(que.empty()) {
-                que.push_back(i);
-                continue;
-            }
-            else if(temperatures[i] > temperatures[que.back()]) {
-                /*注意判断非空*/
-                while(!que.empty() && temperatures[i] > temperatures[que.back()]) {
-                    result[que.back()] = i - que.back();
-                    que.pop_back();
-                }
-                que.push_back(i);
-            }
+            if(i == 0) st.push_back(i);
+            else if(temperatures[i] < temperatures[st.back()]) st.push_back(i);
             else {
-                que.push_back(i);
+                while(!st.empty() && temperatures[st.back()] < temperatures[i]) {
+                    int index = st.back();
+                    st.pop_back();
+                    result[index] = i - index;
+                }
+                st.push_back(i);
             }
-
         }
         return result;
     }
