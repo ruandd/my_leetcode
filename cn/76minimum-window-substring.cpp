@@ -12,36 +12,40 @@ using namespace std;
 //leetcode submit region begin(Prohibit modification and deletion)
 class Solution {
 public:
+    bool cmp(unordered_map<char, int>& ans, unordered_map<char, int>& cnt) {
+        for(auto it : ans) {
+            if(it.second > cnt[it.first])
+                return false;
+        }
+        return true;
+    }
     string minWindow(string s, string t) {
-        int leftBorder, rightBorder;                         /*记录最后的结果*/
-        int left = 0;                                        /*左指针*/
-        int length = INT32_MAX;
-        unordered_map<char, int> map_t;
-        unordered_map<char, int> map_search;
-        for(auto c : t)
-            map_t[c]++;
-
+        unordered_map<char, int> ans;
+        unordered_map<char, int> cnt;
+        for(auto c : t) {
+            ans[c]++;
+            cnt[c] = 0;
+        }
+        int left = 0;
+        bool flag = false;
+        int minLength = INT32_MAX;
+        string ret;
         for(int right = 0; right < s.size(); right++) {
-            if(map_t.find(s[right]) != map_t.end())
-                map_search[right]++;                         /*只把t中出现的字符加入到map中*/
-
-            if(map_t == map_search) {                          /*找到区间，开始收缩无用的字符*/
-                while(map_search.find(s[left++]) == map_search.end());
-                //找到最小区间;
-                if((right - left + 1) < length) {
-                    leftBorder = left;
-                    rightBorder = right;
-                    length = right - left + 1;
+            cnt[s[right]]++;
+            while(cmp(ans, cnt)) {
+                cnt[s[left]]--;
+                left++;
+                flag = true;
+            }
+            if(flag) {
+                int len = right - left + 2;
+                if(len < minLength) {
+                    minLength = len;
+                    ret = string(s.begin() + left - 1, s.begin() + right + 1);
                 }
             }
-            /*再次收缩left，找下一个区间*/
-            while(map_search.find(s[left]) == map_search.end() ||
-                    (map_search.find(s[left])->second-- != 1))
-                left++;
-            left++;
         }
-
-        return s.substr(leftBorder, length);
+        return ret;
     }
 };
 //leetcode submit region end(Prohibit modification and deletion)
